@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "arrowParens": "always",
+  "parser": "typescript",
+  "plugins": ["prettier-plugin-organize-imports"],
+  "overrides": [
+    {
+      "files": "**/*.md",
+      "options": {
+        "parser": "markdown"
+      }
+    },
+    {
+      "files": [
+        ".vscode/**/*.json",
+        "tsconfig.*.json",
+        "tsconfig.json"
+      ],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}
