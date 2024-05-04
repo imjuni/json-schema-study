@@ -6,6 +6,7 @@
 
 import Ajv from 'ajv';
 import ajvFormats from 'ajv-formats';
+import { randomUUID } from 'node:crypto';
 
 const ajv = new Ajv();
 ajvFormats(ajv);
@@ -21,6 +22,22 @@ ajv.addSchema({
           ability: { type: 'string' },
         },
         required: ['name', 'ability'],
+      },
+      // Example of the Composite Schema
+      IComposition: {
+        // JSON Schema composition
+        // @see https://json-schema.org/understanding-json-schema/reference/combining
+        allOf: [
+          { $ref: '#/$defs/organization/IOrganization' },
+          { $ref: '#/$defs/organization/ITeam' },
+        ],
+        type: 'object',
+        properties: {
+          uuid: {
+            type: 'string',
+            format: 'uuid',
+          },
+        },
       },
     },
     organization: {
@@ -57,3 +74,12 @@ const result02 = ajv.getSchema('super-hero#/$defs/organization/ITeam')?.({
 });
 
 console.log('Validation Result: ', result02);
+
+const result03 = ajv.getSchema('super-hero#/$defs/ability/IComposition')?.({
+  name: 'avengers',
+  uuid: randomUUID(),
+  members: ['ironman', 'spiderman'],
+  address: 'NY',
+});
+
+console.log('Validation Result: ', result03);
