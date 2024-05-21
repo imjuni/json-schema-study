@@ -61,6 +61,16 @@ ajv.addSchema({
   },
 });
 
+ajv.addSchema({
+  $id: 'fileUploadSchema',
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    members: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['name', 'members'],
+});
+
 const result01 = ajv.getSchema('#/$defs/ability/IHero')?.({
   name: 'ironman',
   ability: 'Genius-level intellect',
@@ -83,3 +93,14 @@ const result03 = ajv.getSchema('#/$defs/ability/IComposition')?.({
 });
 
 console.log('Validation Result: ', result03);
+
+const validator04 = ajv.compile({ $ref: '#/$defs/ability/IComposition' });
+
+const result04 = validator04({
+  name: 'avengers',
+  uuid: randomUUID(),
+  members: ['ironman', 'spiderman'],
+  address: 'NY',
+});
+
+console.log('Validation Result: ', result04);

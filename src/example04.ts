@@ -83,3 +83,14 @@ const result03 = ajv.getSchema('super-hero#/$defs/ability/IComposition')?.({
 });
 
 console.log('Validation Result: ', result03);
+
+const validator04 = ajv.compile({ $ref: 'super-hero#/$defs/ability/IComposition' });
+
+const result04 = validator04({
+  name: 'avengers',
+  uuid: randomUUID(),
+  members: ['ironman', 'spiderman'],
+  address: 'NY',
+});
+
+console.log('Validation Result: ', result04);
