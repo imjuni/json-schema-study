@@ -1,10 +1,11 @@
 /**
  * JSON Schema Example
  *
+ * Add schema on schema store without $id
+ *
  * - definitions($defs) with schema path
- * - add new schema on $defs
- * - add new schema
  * - non $id schema
+ * - combine two schema
  */
 
 import Ajv from 'ajv';
@@ -64,7 +65,7 @@ ajv.addSchema({
 });
 
 ajv.addSchema({
-  $id: 'fileUploadSchema',
+  $id: '#/$defs/organization/fileUploadSchema',
   type: 'object',
   properties: {
     name: { type: 'string' },
@@ -78,14 +79,14 @@ const result01 = ajv.getSchema('#/$defs/ability/IHero')?.({
   ability: 'Genius-level intellect',
 });
 
-console.log('Validation Result01: ', result01);
+console.log('Validation Result 01: ', result01);
 
 const result02 = ajv.getSchema('#/$defs/organization/ITeam')?.({
   name: 'avengers',
   members: ['ironman', 'spiderman'],
 });
 
-console.log('Validation Result02: ', result02);
+console.log('Validation Result 02: ', result02);
 
 const result03 = ajv.getSchema('#/$defs/ability/IComposition')?.({
   name: 'avengers',
@@ -94,7 +95,7 @@ const result03 = ajv.getSchema('#/$defs/ability/IComposition')?.({
   address: 'NY',
 });
 
-console.log('Validation Result03: ', result03);
+console.log('Validation Result 03: ', result03);
 
 const validator04 = ajv.compile({ $ref: '#/$defs/ability/IComposition' });
 
@@ -105,4 +106,22 @@ const result04 = validator04({
   address: 'NY',
 });
 
-console.log('Validation Result04: ', result04);
+console.log('Validation Result 04: ', result04);
+
+const validator05 = ajv.compile({ $ref: '#/$defs/organization/fileUploadSchema' });
+
+const result05 = validator05({
+  name: 'avengers',
+  members: ['ironman', 'spiderman'],
+});
+
+console.log('Validation Result 05: ', result05);
+
+const validator06 = ajv.getSchema('#/$defs/organization/fileUploadSchema');
+
+const result06 = validator06?.({
+  name: 'avengers',
+  members: ['ironman', 'spiderman'],
+});
+
+console.log('Validation Result 06: ', result06);
